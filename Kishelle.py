@@ -182,7 +182,7 @@ class PetAdoptionApp(ctk.CTk):
         
         if selection in self.animal_breeds:
             self.breed_entry.configure(values=self.animal_breeds[selection])
-            self.breed_entry.set("")  # Clear any previous selection
+            self.breed_entry.set("")
 
     def on_tree_select(self, event):
         
