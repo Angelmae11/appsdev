@@ -1,0 +1,138 @@
+<?php
+// admin/products.php
+session_start();
+require '../config.php';
+require '../inc/functions.php';
+if(!is_admin()) redirect('../index.php');
+
+if(isset($_GET['delete'])){
+    $id = intval($_GET['delete']);
+    $row = $conn->query("SELECT image FROM products WHERE id=$id")->fetch_assoc();
+    $img = $row['image'] ?? '';
+    if($img && file_exists(__DIR__ . '/../uploads/' . $img)) unlink(__DIR__ . '/../uploads/' . $img);
+    $conn->query("DELETE FROM products WHERE id=$id");
+    redirect('products.php');
+}
+
+if(isset($_POST['add'])){
+    $title = $conn->real_escape_string($_POST['title']);
+    $desc  = $conn->real_escape_string($_POST['description']);
+    $price = floatval($_POST['price']);
+    $stock = intval($_POST['stock']);
+    $img_name = '';
+
+    if(isset($_FILES['image']) && $_FILES['image']['name']){
+        $img_name = time().'_'.basename($_FILES['image']['name']);
+        move_uploaded_file($_FILES['image']['tmp_name'], __DIR__ . '/../uploads/'.$img_name);
+    }
+
+    $conn->query("INSERT INTO products(title,description,price,stock,image) VALUES('$title','$desc',$price,$stock,'$img_name')");
+    redirect('products.php');
+}
+
+$products = $conn->query("SELECT * FROM products ORDER BY id DESC");
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Admin Products</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family:'Poppins',sans-serif; }
+        .table thead { background:#0d6efd; color:white; }
+        .table-hover tbody tr:hover { background:#e9f5ff; }
+        .card-header { background:#0d6efd; color:white; font-weight:600; }
+        .thumbnail { width:80px; height:50px; object-fit:cover; border-radius:6px; }
+        .btn-icon i { margin-right:4px; }
+    </style>
+</head>
+<body>
+<?php include 'sidebar.php'; ?>
+
+<div class="content-wrapper">
+    <h2 class="fw-bold mb-3">📦 Product Management</h2>
+
+    <!-- ADD PRODUCT CARD -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header">Add New Product</div>
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data" class="row g-3">
+                <div class="col-md-6">
+                    <input type="text" name="title" class="form-control" placeholder="Title" required>
+                </div>
+                <div class="col-md-6">
+                    <input type="number" step="0.01" name="price" class="form-control" placeholder="Price" required>
+                </div>
+                <div class="col-12">
+                    <textarea name="description" class="form-control" placeholder="Description"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <input type="number" name="stock" class="form-control" placeholder="Stock" required>
+                </div>
+                <div class="col-md-6">
+                    <input type="file" name="image" class="form-control">
+                </div>
+                <div class="col-12">
+                    <button name="add" class="btn btn-success"><i class="bi bi-plus-circle"></i> Add Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- PRODUCTS TABLE -->
+    <div class="card shadow-sm">
+        <div class="card-header">Existing Products</div>
+        <div class="card-body p-0">
+            <table class="table table-hover table-striped align-middle mb-0">
+                <thead>
+                    <tr class="text-center">
+                        <th>ID</th><th>Title</th><th>Price</th><th>Stock</th><th>Image</th><th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while($p = $products->fetch_assoc()): ?>
+                    <tr>
+                        <td class="text-center"><?php echo (int)$p['id']; ?></td>
+                        <td><?php echo htmlspecialchars($p['title']); ?></td>
+                        <td>$<?php echo number_format($p['price'],2); ?></td>
+                        <td><?php echo (int)$p['stock']; ?></td>
+                        <td class="text-center">
+                            <?php if(!empty($p['image']) && file_exists(__DIR__ . '/../uploads/' . $p['image'])): ?>
+                                <img src="../uploads/<?php echo rawurlencode($p['image']); ?>" class="thumbnail" alt="">
+                            <?php else: ?>
+                                <img src="https://via.placeholder.com/80x50?text=No" class="thumbnail" alt="">
+                            <?php endif; ?>
+                        </td>
+                        <td class="text-center">
+                            <a href="products.php?delete=<?php echo $p['id']; ?>" class="btn btn-danger btn-sm btn-icon" onclick="return confirm('Delete this product?');">
+                                <i class="bi bi-trash"></i> Delete
+                            </a>
+                        </td>
+                    </tr>
+                    <?php endwhile; ?>
+                    <?php if($products->num_rows==0): ?>
+                        <tr><td colspan="6" class="text-center text-muted">No products found.</td></tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+Edit File: products.php (PHP)   
+ORIGINAL CODE (WALA PAY EDIT)
+WEBSITE PROJECT MYSQL WITH DATABASE
+
+profreehost.com
+email: kishellega018@gmail.com connect it to my gmail account
+password: kishelleaibhe
+search: seashelle.liveblog365.com
