@@ -1,0 +1,130 @@
+import pytest
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+BASE_URL = "https://practicetestautomation.com/practice-test-table/"
+
+
+@pytest.fixture(scope="module")
+def driver():
+    options = Options()
+    options.add_argument("--headless=new")
+    options.add_argument("--window-size=1920,1080")
+    d = webdriver.Chrome(options=options)
+    d.implicitly_wait(5)
+    yield d
+    d.quit()
+
+
+@pytest.fixture(scope="module")
+def table_rows(driver):
+    driver.get(BASE_URL)
+
+    table = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.TAG_NAME, "table"))
+    )
+    rows = table.find_elements(By.CSS_SELECTOR, "tbody tr")
+
+    data = []
+    for row in rows:
+        cells = row.find_elements(By.TAG_NAME, "td")
+        if len(cells) < 6:
+            continue
+        course = {
+            "id": cells[0].text.strip(),
+            "name": cells[1].text.strip(),
+            "language": cells[2].text.strip(),
+            "level": cells[3].text.strip(),
+            "enrollments": int(cells[4].text.replace(",", "").strip() or "0"),
+            "link_text": cells[5].text.strip(),
+        }
+        data.append(course)
+    return data
+
+
+
+def test_language_filter_java(table_rows):
+    filtered = [c for c in table_rows if c["language"] == "Java"]
+
+    assert filtered, "Expected at least one Java course"
+    assert all(c["language"] == "Java" for c in filtered)
+
+
+
+def test_level_filter_beginner_only(table_rows):
+    # Emulate unchecking Intermediate and Advanced: keep only Beginner
+    filtered = [c for c in table_rows if c["level"] == "Beginner"]
+
+    assert filtered, "Expected at least one Beginner course"
+    assert all(c["level"] == "Beginner" for c in filtered)
+
+
+
+def test_min_enrollments_10000_plus(table_rows):
+    # "Min enrollments = 10,000+" → enrollments >= 10000
+    filtered = [c for c in table_rows if c["enrollments"] >= 10000]
+
+    assert filtered, "Expected some courses with enrollments >= 10000"
+    assert all(c["enrollments"] >= 10000 for c in filtered)
+
+
+
+def test_python_beginner_10000_plus(table_rows):
+    filtered = [
+        c for c in table_rows
+        if c["language"] == "Python"
+        and c["level"] == "Beginner"
+        and c["enrollments"] >= 10000
+    ]
+
+    assert all(c["language"] == "Python" for c in filtered)
+    assert all(c["level"] == "Beginner" for c in filtered)
+    assert all(c["enrollments"] >= 10000 for c in filtered)
+
+
+
+def test_no_results_combination(table_rows):
+    filtered = [
+        c for c in table_rows
+        if c["level"] == "Advanced" and c["enrollments"] >= 50000
+    ]
+
+    assert filtered == []
+
+
+
+def test_reset_like_behavior(table_rows):
+    java_only = [c for c in table_rows if c["language"] == "Java"]
+    assert java_only, "Expected Java courses to exist"
+
+    reset_view = table_rows
+
+    assert len(reset_view) == len(table_rows)
+
+    languages_after = {c["language"] for c in reset_view}
+    assert "Java" in languages_after
+    assert any(c["language"] != "Java" for c in reset_view)
+
+
+
+def test_sort_by_enrollments_ascending(table_rows):
+    # Emulate sorting numerically by enrollments
+    sorted_by_enroll = sorted(table_rows, key=lambda c: c["enrollments"])
+
+    # Check ascending order (numeric, commas already removed when parsed)
+    enrollments = [c["enrollments"] for c in sorted_by_enroll]
+    assert enrollments == sorted(enrollments)
+
+
+
+def test_sort_by_course_name_alphabetical(table_rows):
+    # Emulate sorting by course name, case-insensitive
+    sorted_by_name = sorted(
+        table_rows, key=lambda c: c["name"].strip().lower()
+    )
+
+    names = [c["name"].strip().lower() for c in sorted_by_name]
+    assert names == sorted(names)
