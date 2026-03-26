@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Red Wines</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Red Wines List</h1>
+<div id="wineList"></div>
+
+<script>
+fetch('https://api.sampleapis.com/wines/reds')
+  .then(response => response.json())
+  .then(data => {
+    const container = document.getElementById('wineList');
+
+    data.forEach(wine => {
+      const div = document.createElement('div');
+      div.className = 'wine';
+
+      div.innerHTML = `
+        <h3>${wine.wine}</h3>
+        <p><strong>Winery:</strong> ${wine.winery}</p>
+        <p><strong>Location:</strong> ${wine.location}</p>
+        <p><strong>Rating:</strong> ${wine.rating.average} ⭐</p>
+        <img src="${wine.image}" alt="${wine.wine}">
+      `;
+
+      container.appendChild(div);
+    });
+  })
+  .catch(error => console.error('Error:', error));
+</script>
+
+</body>
+</html>

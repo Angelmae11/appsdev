@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="em">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <main>
+            <h1 id="shop">Coffee</h1>
+            <div id="menu">Loading menu...</div>
+        </main>
+
+        <script>
+            function loadMenu() {
+                fetch('Exercise2.json')
+                .then(res => {
+                    if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
+                    return res.json();
+                })
+                .then(data => {
+                    const shopName = data[0] && data[0].Shop ? data[0].Shop : 'Coffee';
+                    document.getElementById('shop').textContent = ' ' + shopName;
+                    const subtitle = document.createElement('div');
+                    subtitle.className = 'subtitle';
+                    subtitle.textContent = 'Fresh Coffee Menu';
+                    document.getElementById('shop').after(subtitle);
+                    const menu = data[0] && data[0].Menu ? data[0].Menu : [];
+                    const container = document.getElementById('menu');
+                    container.innerHTML = '';
+                    if (!menu.length) {
+                        container.textContent = 'No menu available.';
+                        return;
+                    }
+                    const table = document.createElement('table');
+                    table.className = 'menu-table';
+                    table.innerHTML = '<thead><tr><th>Name</th><th>Size</th><th>Price (Hot)</th><th>Price (Cold)</th></tr></thead>';
+                    const tbody = document.createElement('tbody');
+                    menu.forEach(item => {
+                        const tr = document.createElement('tr');
+                        const hot = item['Price (Hot)'] ?? 'N/A';
+                        const cold = item['Price (Cold)'] ?? 'N/A';
+                        tr.innerHTML = `
+                            <td data-label="Name">${item.name}</td>
+                            <td class="size" data-label="Size">${item.Size}</td>
+                            <td class="price" data-label="Price (Hot)">₱${hot}</td>
+                            <td class="price" data-label="Price (Cold)">₱${cold}</td>`;
+                        tbody.appendChild(tr);
+                    });
+                    table.appendChild(tbody);
+                    container.appendChild(table);
+                })
+                .catch(err => {
+                    document.getElementById('menu').textContent = 'Error loading menu: ' + err.message;
+                });
+            }
+
+            loadMenu();
+        </script>
+    </body>
+</html>

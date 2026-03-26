@@ -1,0 +1,23 @@
+[
+  {
+    "wine": "Cabernet Sauvignon",
+    "winery": "Silver Oak",
+    "location": "Napa Valley, USA",
+    "rating": { "average": 4.5 },
+    "image": "https://via.placeholder.com/250"
+  },
+  {
+    "wine": "Merlot",
+    "winery": "Duckhorn",
+    "location": "California, USA",
+    "rating": { "average": 4.3 },
+    "image": "https://via.placeholder.com/250"
+  },
+  {
+    "wine": "Pinot Noir",
+    "winery": "Meiomi",
+    "location": "California, USA",
+    "rating": { "average": 4.4 },
+    "image": "https://via.placeholder.com/250"
+  }
+]

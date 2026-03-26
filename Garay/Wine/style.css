@@ -1,0 +1,79 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  padding: 20px;
+  text-align: center;
+}
+
+/* TITLE */
+h1 {
+  margin-bottom: 25px;
+}
+
+/* ✅ GRID CONTAINER (MAIN FIX) */
+#wineList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ✅ CARD DESIGN */
+.wine {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: left;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* HOVER EFFECT */
+.wine:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  border: 1px solid #d14f8a;
+  background-color: #ffe1ee;
+}
+
+/* IMAGE FIX */
+.wine img {
+  width: 100%;
+  height: 200px;
+  object-fit: contain; /* keeps full bottle visible */
+  margin-top: 10px;
+}
+
+/* TEXT STYLING */
+.wine h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.wine p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+/* RESPONSIVE (MOBILE) */
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+
+  .wine img {
+    height: 180px;
+  }
+}

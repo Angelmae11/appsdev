@@ -1,0 +1,55 @@
+[
+    {
+        "Shop": "Kishelle's Coffee",
+        "Menu": [
+            {
+            "name": "Espresso", 
+            "Size": "Regular", 
+            "Price (Hot)": 180, 
+            "Price (Cold)": 200 
+        },
+        {
+            "name": "Double", 
+            "Size": "Regular", 
+            "Price (Hot)": 200, 
+            "Price (Cold)": 220 
+        },
+        {
+            "name": "Cappucino", 
+            "Size": "Regular", 
+            "Price (Hot)": 220, 
+            "Price (Cold)": 240 
+        },
+        {
+            "name": "Cafe Latte", 
+            "Size": "Regular", 
+            "Price (Hot)": 220, 
+            "Price (Cold)": 240 
+        },
+        {
+            "name": "Americano", 
+            "Size": "Regular", 
+            "Price (Hot)": 180, 
+            "Price (Cold)": 200 
+        },
+        {
+            "name": "Cafe Mocha", 
+            "Size": "Regular", 
+            "Price (Hot)": 220, 
+            "Price (Cold)": 240 
+        },
+        {
+            "name": "Macchiato", 
+            "Size": "Regular", 
+            "Price (Hot)": 220, 
+            "Price (Cold)": 240 
+        },
+        {
+            "name": "Chocolate", 
+            "Size": "Regular", 
+            "Price (Hot)": 230, 
+            "Price (Cold)": 250 
+        }
+        ]
+    }
+]

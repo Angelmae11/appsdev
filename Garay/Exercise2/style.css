@@ -1,0 +1,84 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to right, #e6e6fa, #f8f8ff);
+}
+
+/* Container */
+.container {
+    width: 80%;
+    margin: 50px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* Title */
+h1 {
+    text-align: center;
+    color: #6a0dad;
+}
+
+.subtitle {
+    text-align: center;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse; /* removes double borders */
+    border: 2px solid #dcd6f7; /* outer border */
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Header */
+th {
+    background: #dcd6f7;
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ccc;
+}
+
+/* Cells */
+td {
+    padding: 12px;
+    border: 1px solid #eee;
+}
+
+/* Alignment */
+td:first-child {
+    text-align: left;
+}
+
+td:nth-child(2) {
+    text-align: center;
+}
+
+td:nth-child(3),
+td:nth-child(4) {
+    text-align: right;
+    color: green;
+    font-weight: bold;
+}
+
+/* Zebra rows */
+tr:nth-child(even) {
+    background: #fafafa;
+}
+
+/* Hover effect */
+tr:hover {
+    background: #f1f1ff;
+    transition: 0.3s;
+}
